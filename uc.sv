@@ -235,7 +235,7 @@ output logic[31:25]FUNCT7
     SAIDA_ESTADO = 8;
     PC_WRITE = 0;
     RESET_WIRE = 0;
-    ALU_SRCA = 1;
+    ALU_SRCA = 2;
     ALU_SRCB = 2;
     ALU_SELECTOR = 1;
     LOAD_ALU_OUT = 1; //FALTA DECLARAR NA UC
