@@ -1,7 +1,7 @@
-module AND(
-input logic entrada_1,
-input logic entrada_2,
-output logic saida
+module ANDY(
+	input logic entrada_1,
+	input logic entrada_2,
+	output logic saida
 );
 always_comb
 	begin
@@ -35,5 +35,3 @@ always_comb
 		endcase
 	end
 endmodule
-
-

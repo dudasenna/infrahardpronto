@@ -5,7 +5,7 @@ wire RESET_WIRE;
 wire IR_WIRE;//ok
 wire LOAD_A;//ok
 wire LOAD_B;//ok
-WIRE ALU_OUT_MUX_WIRE;
+wire ALU_OUT_MUX_WIRE;
 wire UC_TO_OR;
 wire PC_WRITE;//ok
 wire MEM32_WIRE;//ok
@@ -17,10 +17,10 @@ wire DMEM_RW;//ok
 wire IGUAL;
 wire MAIOR;
 wire MENOR;
-wire IGUAL_TO_AND;
 wire MUX_MR_WIRE;//ok\
 wire UC_TO_AND;
 wire AND_TO_OR;
+wire SHIFT;
 wire [1:0]ALU_SRCA;//ok
 wire [2:0] ALU_SRCB;//ok
 wire [2:0] ALU_SELECTOR;//ok
@@ -37,7 +37,7 @@ wire [31:26]FUNCT6;
 wire [63:0] MEM_TO_REG;//ok
 wire [63:0] REGMEM_TO_MUX;
 wire [63:0] MUX_TO_WRITE_DATA;
-wire [63:0] ALU_OUT_TO_MEM;
+wire [63:0] ALU_OUT_TO_MUX;
 wire [63:0] PC_IN;//ok
 wire [63:0] PC_OUT;//ok
 wire [63:0] A_IN_ALU;//ok
@@ -80,9 +80,9 @@ uc UC(//ok
  .FUNCT6(FUNCT6),
  .MUX_MR_WIRE(MUX_MR_WIRE),
  .ALU_OUT_MUX_WIRE(ALU_OUT_MUX_WIRE),
- .IGUAL_TO_AND(IGUAL_TO_AND),
  .UC_TO_AND(UC_TO_AND),
- .UC_TO_OR(UC_TO_OR)
+ .UC_TO_OR(UC_TO_OR),
+ .SHIFT(SHIFT)
  );
 
 mux4 MUX_A( //ok
@@ -96,15 +96,15 @@ mux4 MUX_A( //ok
 
 mux2 MUX_MR( //ok
  .SELETOR(MUX_MR_WIRE),
- .ENTRADA_1(ALU_OUT),
+ .ENTRADA_1(ALU_TO_OUT),
  .ENTRADA_2(REGMEM_TO_MUX),
  .SAIDA(MUX_TO_WRITE_DATA)
  );
 
  mux2 ALU_OUT_MUX( //ok
  .SELETOR(ALU_OUT_MUX_WIRE),
- .ENTRADA_1(ALU_OUT_TO_MEM),
- .ENTRADA_2(ALU_OUT),
+ .ENTRADA_1(ALU_OUT_TO_MUX),
+ .ENTRADA_2(ALU_TO_OUT),
  .SAIDA(PC_IN)
  );
 
@@ -204,8 +204,10 @@ SignExt SIGNEXT(//ok
  );
 
 ShiftL1 SHIFTL1(//ok
- .entrada(SIGN_OUT),
- .saida(SHIFT_OUT)
+ .Shift(),
+ .Entrada(),
+ .N(),
+ .Saida()
  );
 
 register ALU_OUT(//ok
@@ -223,9 +225,10 @@ register MEMORY_DATA_REG(//ok
  .DadoIn(MEM_TO_REG),
  .DadoOut(REGMEM_TO_MUX)
  );
-and AND(
+
+ANDY E(
 .entrada_1(UC_TO_AND),
-.entrada_2(IGUAL_TO_AND),
+.entrada_2(IGUAL),
 .saida(AND_TO_OR)
 );
 ou OR(
