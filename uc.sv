@@ -85,6 +85,7 @@ module uc(
   end
   
   BUSCA:
+  //nao esta buscando certo
   begin
    SAIDA_ESTADO = 1;
    //PC_WRITE = 0;
@@ -94,7 +95,7 @@ module uc(
    ALU_SELECTOR = 0;
    LOAD_ALU_OUT = 0; //FALTA DECLARAR NA UC
    DMEM_RW = 0; //0 => READ, 1 => WRITE FALTA DECLARAR NA UC
-   MEM32_WIRE = 1;
+   MEM32_WIRE = 0;//?
    IR_WIRE = 1;
    LOAD_A = 0;
    LOAD_B = 0;
@@ -116,15 +117,15 @@ module uc(
    ALU_SRCA = 0;
    ALU_SRCB = 1;
    ALU_SELECTOR = 1;
-   LOAD_ALU_OUT = 1; //TAVA 1
+   LOAD_ALU_OUT = 0; //TAVA 1
    DMEM_RW = 0; //0 => READ, 1 => WRITE FALTA DECLARAR NA UC
    MEM32_WIRE = 0;
-   IR_WIRE = 0;
+   IR_WIRE = 1;
    LOAD_A = 0;
    LOAD_B = 0;
    MUX_MR_WIRE = 0;
    LOAD_MDR = 0;
-   BANCO_WIRE = 0 ;
+   BANCO_WIRE = 0;
    SHIFT= 0;
    UC_TO_AND = 0;
    UC_TO_OR = 1;
@@ -156,45 +157,45 @@ module uc(
    
 
     case(IR6_0)//LER OPCODE
+
       51: //ADD, SUB, AND, SLT LEMBRAR QUE O OPCODE ESTA MODIFICADO
-        begin
+        begin//ok
     		  PROX_ESTADO = R;
         end
 
       19: //ADDI, SLTI E NOP E 'SHIFTS
-        begin
+        begin//ok
   		    PROX_ESTADO = I1;
         end	
 
       3: //LB, LH, LW, LD, LBU, LHU, LWU
-        begin
+        begin//ok
   		    PROX_ESTADO = I2;
         end
 
   	   115: //BREAK
-  	 begin
-  		PROX_ESTADO = I3;
-       end
+  	     begin
+  		    PROX_ESTADO = I3;
+         end
 
       35: //TIPO S
        begin
-
-  		PROX_ESTADO = S;
+  		    PROX_ESTADO = S;
        end 
 
       99: //BEQ1
        begin
-  		PROX_ESTADO = BEQ1;
+  		    PROX_ESTADO = BEQ1;
        end
 
       103: //JALR E TIPO SB
        begin
-  		PROX_ESTADO = JALR_SB;
+  		    PROX_ESTADO = JALR_SB;
        end
 
       55: //LUI
        begin
-  		PROX_ESTADO = LUI;
+  		    PROX_ESTADO = LUI;
        end
 
       111: //JAL
@@ -204,7 +205,7 @@ module uc(
 
       default:
         begin
-          PROX_ESTADO = BUSCA;
+          PROX_ESTADO = RESET_ESTADO;//O CODIGO ESTA ENTRANDO NESSE default (nao reconhece o opcode)
         end
     endcase
   end
@@ -263,7 +264,7 @@ module uc(
     		//7: //AND
     		2: //SLT
           begin
-            //SAIDA_ESTADO = ;
+            SAIDA_ESTADO =6 ;
             //PC_WRITE = 0;
             RESET_WIRE = 0;
             ALU_SRCA = 1;
@@ -295,7 +296,7 @@ module uc(
       0: //devemos salvar 0 em rd: soma entre 0 e 0
 
         begin
-          SAIDA_ESTADO = 17;
+          SAIDA_ESTADO = 7;
           //PC_WRITE = 0;
           RESET_WIRE = 0;
           ALU_SRCA = 2;
@@ -321,6 +322,7 @@ module uc(
       1: //rs1<rs2: devemos salvar 1 em rd: soma entre 0 e 1
 
         begin
+          SAIDA_ESTADO = 8;
           RESET_WIRE = 0;
           ALU_SRCA = 3;
           ALU_SRCB = 4;
@@ -347,7 +349,7 @@ module uc(
 
  R2:
     begin
-      SAIDA_ESTADO = 6;
+      SAIDA_ESTADO = 9;
       //PC_WRITE = 0;
       RESET_WIRE = 0;
       ALU_SRCA = 0;
@@ -375,7 +377,7 @@ module uc(
 		0: //ADDI
 
       begin
-        SAIDA_ESTADO = 7;
+        SAIDA_ESTADO = 10;
         //PC_WRITE = 0;
         RESET_WIRE = 0;
         ALU_SRCA = 1;
@@ -399,7 +401,7 @@ module uc(
 
 		2: //SLTI
       begin
-        //SAIDA_ESTADO = ;
+        SAIDA_ESTADO =11;
         RESET_WIRE = 0;
         ALU_SRCA = 1;
         ALU_SRCB = 0;
@@ -584,7 +586,7 @@ module uc(
 	case(FUNCT3)
 		7: //SD
     begin
-      SAIDA_ESTADO = 9;
+      SAIDA_ESTADO = 16;
       //PC_WRITE = 0;
       RESET_WIRE = 0;
       ALU_SRCA = 1;
@@ -623,7 +625,7 @@ module uc(
 SD2:
 
    begin
-    SAIDA_ESTADO = 10;
+    SAIDA_ESTADO = 17;
     //PC_WRITE = 0;
     RESET_WIRE = 0;
     ALU_SRCA = 0;//?
@@ -649,7 +651,7 @@ SD2:
   SD3:
 
    begin
-    SAIDA_ESTADO = 11;
+    SAIDA_ESTADO = 18;
     //PC_WRITE = 0;
     RESET_WIRE = 0;
     ALU_SRCA = 0;//?
@@ -674,7 +676,7 @@ SD2:
 
 	BEQ1:
     begin
-	    SAIDA_ESTADO = 16;
+	    SAIDA_ESTADO = 19;
       //PC_WRITE = 0;
       RESET_WIRE = 0;
       ALU_SRCA = 0;
@@ -703,7 +705,7 @@ begin
     0:
       begin
         //NAO EH IGUAL -> PULA P BUSCA
-        SAIDA_ESTADO = 17;
+        SAIDA_ESTADO = 20;
         //PC_WRITE = 0;
         RESET_WIRE = 0;
         ALU_SRCA = 0;
@@ -729,7 +731,7 @@ begin
 
     1: //IGUAL->pc=pc+imm
       begin
-        SAIDA_ESTADO = 18;
+        SAIDA_ESTADO = 21;
         //PC_WRITE = 1;
         RESET_WIRE = 0;
         ALU_SRCA =0 ;
@@ -758,7 +760,7 @@ end
   	case(FUNCT3)
   		1: //BNE
       begin
-        SAIDA_ESTADO = 19;
+        SAIDA_ESTADO = 22;
         //PC_WRITE = 0;
         RESET_WIRE = 0;
         ALU_SRCA = 0;
@@ -783,7 +785,7 @@ end
 
   		5: //BGE
         begin
-          SAIDA_ESTADO = 16;
+          SAIDA_ESTADO = 23;
           //PC_WRITE = 0;
           RESET_WIRE = 0;
           ALU_SRCA = 0;
@@ -808,7 +810,7 @@ end
 
   		4: //BLT
         begin
-          SAIDA_ESTADO = 16;
+          SAIDA_ESTADO = 24;
           //PC_WRITE = 0;
           RESET_WIRE = 0;
           ALU_SRCA = 0;
@@ -834,7 +836,7 @@ end
   		0: //JALR
         begin
           //soma pc com rd
-          SAIDA_ESTADO = 7;
+          SAIDA_ESTADO = 25;
           //PC_WRITE = 0;
           RESET_WIRE = 0;
           ALU_SRCA = 0;
@@ -860,7 +862,7 @@ end
   end
   JALR2: //salva pc em rd
     begin
-      //SAIDA_ESTADO = ;
+      SAIDA_ESTADO =26 ;
       //PC_WRITE = 0;
       RESET_WIRE = 0;
       ALU_SRCA = 0;
@@ -884,7 +886,7 @@ end
 
 JALR3: //PC=(rs1+imm)*
   begin
-    //SAIDA_ESTADO = ;
+    SAIDA_ESTADO =27 ;
     //PC_WRITE = 1;
     RESET_WIRE = 0;
     ALU_SRCA = 1;
@@ -912,7 +914,7 @@ JALR3: //PC=(rs1+imm)*
     1:begin
     //eh o que ele quer->pc=pc+imm
 
-    SAIDA_ESTADO = 18;
+    SAIDA_ESTADO = 28;
       //PC_WRITE = 1;
       RESET_WIRE = 0;
       ALU_SRCA =0 ;
@@ -938,7 +940,7 @@ JALR3: //PC=(rs1+imm)*
     0:
     begin
     //nao eh o q ele quer->busca
-      SAIDA_ESTADO = 17;
+      SAIDA_ESTADO = 29;
       //PC_WRITE = 0;
       RESET_WIRE = 0;
       ALU_SRCA = 0;
@@ -967,7 +969,7 @@ JALR3: //PC=(rs1+imm)*
   case(MENOR)
     0: //eh o que ele quer->pc=pc+imm
       begin
-        SAIDA_ESTADO = 18;
+        SAIDA_ESTADO = 30;
         //PC_WRITE = 1;
         RESET_WIRE = 0;
         ALU_SRCA =0 ;
@@ -992,7 +994,7 @@ JALR3: //PC=(rs1+imm)*
       
     1: //nao eh o q ele quer->busca
       begin
-        SAIDA_ESTADO = 17;
+        SAIDA_ESTADO = 31;
         //PC_WRITE = 0;
         RESET_WIRE = 0;
         ALU_SRCA = 0;
@@ -1022,7 +1024,7 @@ JALR3: //PC=(rs1+imm)*
       case(IGUAL)
         1: //IGUAL->pula pra busca
           begin
-            SAIDA_ESTADO = 17;
+            SAIDA_ESTADO = 32;
             //PC_WRITE = 0;
             RESET_WIRE = 0;
             ALU_SRCA = 0;
@@ -1048,7 +1050,7 @@ JALR3: //PC=(rs1+imm)*
 
         0: //NAO EH IGUAL->pc=pc+imm
           begin
-            SAIDA_ESTADO = 18;
+            SAIDA_ESTADO = 33;
             //PC_WRITE = 1;
             RESET_WIRE = 0;
             ALU_SRCA =0 ;
@@ -1075,7 +1077,7 @@ JALR3: //PC=(rs1+imm)*
     end
   	LUI:
      begin
-      SAIDA_ESTADO = 8;
+      SAIDA_ESTADO = 34;
       //PC_WRITE = 0;
       RESET_WIRE = 0;
       ALU_SRCA = 2;

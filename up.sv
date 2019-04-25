@@ -103,8 +103,8 @@ mux2 MUX_MR( //ok
 
  mux2 ALU_OUT_MUX( //ok
  .SELETOR(ALU_OUT_MUX_WIRE),
- .ENTRADA_1(ALU_OUT_TO_MUX),
- .ENTRADA_2(ALU_TO_OUT),
+ .ENTRADA_1(ALU_TO_OUT),
+ .ENTRADA_2(ALU_OUT_TO_MUX),
  .SAIDA(PC_IN)
  );
 
@@ -146,13 +146,13 @@ Instr_Reg_RISC_V BANCO(//ok
 bancoReg BANCOREG(//ok
  .write(BANCO_WIRE), //p
  .clock(CLK),
-        .reset(RESET),
-        .regreader1(IR19_15),
-        .regreader2(IR24_20),
-        .regwriteaddress(IR11_7),
-        .datain(MUX_TO_WRITE_DATA),
-        .dataout1(RS1),
-        .dataout2(RS2)
+	.reset(RESET),
+	.regreader1(IR19_15),
+	.regreader2(IR24_20),
+	.regwriteaddress(IR11_7),
+	.datain(MUX_TO_WRITE_DATA),
+	.dataout1(RS1),
+	.dataout2(RS2)
 );
 
 Memoria32 MEMORIA32(//p
