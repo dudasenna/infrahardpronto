@@ -1,11 +1,14 @@
-module Deslocamento (	
+module ShiftL1 (	
 	input logic [1:0] Shift,
-	input logic signed [63:0] Entrada,
-	input logic [5:0] N,
+	input logic signed [63:0] Entrada,//rs1 to shift
+	input logic [5:0] N,//IR24_19
 	output logic [63:0]Saida
 );
 
-
+/*
+esquerda multiplica
+logico positivo
+*/
 always_comb
 	case(Shift)
 		2'b00: //Shift a Esquerda lógico de N Vezes 
@@ -19,4 +22,4 @@ always_comb
 	endcase // Shift
 
 
-endmodule:Deslocamento
+endmodule:ShiftL1
