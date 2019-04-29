@@ -1,5 +1,3 @@
-<<<<<<< HEAD
-
 module uc(
 	input logic CLK,//ok
 	input logic RESET,//ok
@@ -2176,5 +2174,4 @@ JALR3: //PC=(rs1+imm)*
       begin
       end
 endcase
->>>>>>> a2c4aa62aaea4558058506ea15ea34b944fba615
 endmodule
